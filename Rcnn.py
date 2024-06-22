@@ -4,6 +4,7 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn
 from torchvision.transforms import functional as F
 from PIL import Image
 import matplotlib.pyplot as plt
+from get_area import get_max_non_overlapping_box, plot_avariable_area
 
 # COCO 데이터셋 클래스 이름들
 COCO_INSTANCE_CATEGORY_NAMES = [
@@ -55,10 +56,9 @@ def detect_objects(img_path, threshold=0.5):
             filtered_scores.append(score)
 
     return img, filtered_boxes, filtered_classes, filtered_scores
-
 def plot_results(img, boxes, classes, scores):
     # 바운딩 박스와 클래스를 이미지에 표시
-    plt.figure(figsize=(12, 8))
+    plt.figure(figsize=(8, 8))
     plt.imshow(img)
     ax = plt.gca()
 
@@ -77,5 +77,8 @@ if __name__ == '__main__':
     print("Detected objects:")
     for cls, box, score in zip(classes, boxes, scores):
         print(f"Class: {cls}, Box: {box}, Score: {score:.2f}")
-
     plot_results(img, boxes, classes, scores)
+    area = get_max_non_overlapping_box(boxes)
+    print(area)
+
+    plot_avariable_area(area)
