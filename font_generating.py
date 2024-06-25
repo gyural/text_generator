@@ -18,7 +18,10 @@ def find_optimal_font_size(draw, text, font_path, box_width, box_height):
 
 def add_text_to_image(image_path, text_boxes, font_size, text_color, font_path=None):
     # 이미지 열기
-    image = Image.open(image_path).convert("RGBA")
+    if isinstance(image_path, str):
+        image = Image.open(image_path).convert("RGBA")
+    else:
+        image = image_path.convert("RGBA")
     txt = Image.new('RGBA', image.size, (255, 255, 255, 0))
     draw = ImageDraw.Draw(txt)
 
@@ -68,26 +71,37 @@ def add_text_to_image(image_path, text_boxes, font_size, text_color, font_path=N
     combined = Image.alpha_composite(image, txt)
     return combined
 
+# @param image{object image}
 def show_image(image):
     plt.figure(figsize=(8, 8))
     plt.imshow(image)
     plt.axis('off')
     plt.show()
 
+def show_boxes(image_path, text_boxes):
+    if isinstance(image_path, str):
+        image = Image.open(image_path).convert("RGBA")
+    else:
+        image = image_path.convert("RGBA")
+    draw = ImageDraw.Draw(image)
+    for box, _ in text_boxes:
+        draw.rectangle(box, outline="red", width=2)
+    return image
+
 if __name__ == '__main__':
-    # 설정 값
     image_path = '/Users/imgyuseong/PycharmProjects/text_generator/datas/resized_image.png'
     font_size = 20
     text_color = (255, 0, 0, 255)  # 텍스트 색상 (RGBA)
     font_path = '/Users/imgyuseong/PycharmProjects/text_generator/datas/DejaVuSans.ttf'
 
-    # 텍스트와 박스 좌표 입력
     text_boxes = [
         ([(50, 50), (300, 100)], 'This is a long text that may overflow the box and needs to be wrapped.'),
         ([(100, 200), (250, 250)], 'Short text.'),
-        ([(50, 300), (350, 350)], 'Another very long text that needs to be wrapped into multiple lines.')
+        ([(50, 300), (200, 350)], 'Another very long text that needs to be wrapped into multiple lines.')
     ]
 
-    # 함수 호출
-    image_with_text = add_text_to_image(image_path, text_boxes, font_size, text_color, font_path)
+    image = Image.open(image_path).convert("RGBA")
+    boxed_image = show_boxes(image, text_boxes)
+    print(boxed_image)
+    image_with_text = add_text_to_image(boxed_image, text_boxes, font_size, text_color, font_path)
     show_image(image_with_text)
