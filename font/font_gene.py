@@ -1,5 +1,5 @@
 from html2image import Html2Image
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import os
 
 def render_text_to_image(html_template_path, text, font_size, image_width, image_height, bbox):
@@ -21,11 +21,10 @@ def render_text_to_image(html_template_path, text, font_size, image_width, image
     hti = Html2Image()
 
     # Generate a temporary output image path
-    temp_image_path = 'temp_image.png'
+    temp_image_path = '../datas/temp_image.png'
 
     # Convert HTML to image
-    hti.screenshot(html_str=html_content, save_as=temp_image_path, size=(image_width//2, image_height//2)
-                   )
+    hti.screenshot(html_str=html_content, save_as=temp_image_path, size=(image_width//2, image_height//2))
 
     # Load the generated image into a PIL Image object
     image = Image.open(temp_image_path)
@@ -35,13 +34,36 @@ def render_text_to_image(html_template_path, text, font_size, image_width, image
 
     return image
 
+def find_optimal_font_size(html_template_path, text, image_width, image_height, bbox):
+    font_size = 10
+    step = 5
+    max_attempts = 100
+    attempts = 0
+
+    while attempts < max_attempts:
+        image = render_text_to_image(html_template_path, text, font_size, image_width, image_height, bbox)
+        bbox_image = Image.new("RGB", (bbox[2] - bbox[0], bbox[3] - bbox[1]), (255, 255, 255))
+        bbox_draw = ImageDraw.Draw(bbox_image)
+        text_size = bbox_draw.textbbox((0, 0), text, font=ImageFont.truetype("DejaVuSans.ttf", font_size))
+
+        if text_size[2] <= (bbox[2] - bbox[0]) and text_size[3] <= (bbox[3] - bbox[1]):
+            font_size += step
+        else:
+            break
+
+        attempts += 1
+
+    return font_size - step
+
 if __name__ == '__main__':
     html_template_path = 'font.html'
     text = 'This is a test text!'
-    font_size = 30
     image_width = 800
     image_height = 800
-    bbox = [50, 50, 750, 750]  # x0, y0, x1, y1
+    bbox = [50, 50, 400, 400]  # x0, y0, x1, y1
 
-    image = render_text_to_image(html_template_path, text, font_size, image_width, image_height, bbox)
+    optimal_font_size = find_optimal_font_size(html_template_path, text, image_width, image_height, bbox)
+    print(f'Optimal Font Size: {optimal_font_size}')
+
+    image = render_text_to_image(html_template_path, text, optimal_font_size, image_width, image_height, bbox)
     image.show()  # Display the image
