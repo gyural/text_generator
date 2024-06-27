@@ -55,15 +55,18 @@ def find_optimal_font_size(html_template_path, text, image_width, image_height, 
 
     return font_size - step
 
-if __name__ == '__main__':
+def get_final_text_img(bbox, width=800, height=800):
+    bbox = [bbox[0][0], bbox[0][1], bbox[1][0], bbox[1][1]]
     html_template_path = 'font.html'
     text = 'This is a test text!'
-    image_width = 800
-    image_height = 800
+    image_width, image_height = width, height
+    optimal_font_size = find_optimal_font_size(html_template_path, text, image_width, image_height, bbox)
+    image = render_text_to_image(html_template_path, text, optimal_font_size, image_width, image_height, bbox)
+
+    return image
+if __name__ == '__main__':
+
     bbox = [50, 50, 400, 400]  # x0, y0, x1, y1
 
-    optimal_font_size = find_optimal_font_size(html_template_path, text, image_width, image_height, bbox)
-    print(f'Optimal Font Size: {optimal_font_size}')
-
-    image = render_text_to_image(html_template_path, text, optimal_font_size, image_width, image_height, bbox)
+    image = get_final_text_img()
     image.show()  # Display the image

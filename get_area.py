@@ -67,13 +67,3 @@ def plot_avariable_area(bounding_boxes, img_size=(800, 800)):
 
     # plt.show() 대신 savefig를 사용하여 공백 없이 이미지 저장
     plt.savefig('/Users/imgyuseong/PycharmProjects/text_generator/datas/text_boxes.png', bbox_inches='tight', pad_inches=0)
-
-# 테스트를 위한 예제
-existing_boxes = [
-    [(58.273834, 495.4965), (752.9227, 622.18494)],
-    [(100, 100), (200, 200)],
-    [(300, 400), (500, 600)]
-]
-
-max_non_overlapping_boxes = get_max_non_overlapping_box(existing_boxes)
-print("Max non-overlapping boxes:", max_non_overlapping_boxes)
