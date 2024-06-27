@@ -9,19 +9,19 @@ def render_text_to_image(html_template_path, text, font_size, image_width, image
 
     # Replace placeholders with actual values
     html_content = html_template.replace('{{ text }}', text)
-    html_content = html_content.replace('{{ font_size }}', str(font_size//2))
-    html_content = html_content.replace('{{ image_width }}', str(image_width//2))
-    html_content = html_content.replace('{{ image_height }}', str(image_height//2))
+    html_content = html_content.replace('{{ font_size }}', str(font_size/2))
+    html_content = html_content.replace('{{ image_width }}', str(image_width/2))
+    html_content = html_content.replace('{{ image_height }}', str(image_height/2))
     html_content = html_content.replace('{{ bbox_x0 }}', str(bbox[0]//2))
     html_content = html_content.replace('{{ bbox_y0 }}', str(bbox[1]//2))
-    html_content = html_content.replace('{{ bbox_width }}', str((bbox[2] - bbox[0])//2))
-    html_content = html_content.replace('{{ bbox_height }}', str((bbox[3] - bbox[1])//2))
+    html_content = html_content.replace('{{ bbox_width }}', str((bbox[2] - bbox[0])/2))
+    html_content = html_content.replace('{{ bbox_height }}', str((bbox[3] - bbox[1])/2))
 
     # Create an Html2Image instance
     hti = Html2Image()
 
     # Generate a temporary output image path
-    temp_image_path = '../datas/temp_image.png'
+    temp_image_path = 'temp_image.png'
 
     # Convert HTML to image
     hti.screenshot(html_str=html_content, save_as=temp_image_path, size=(image_width//2, image_height//2))
@@ -30,7 +30,7 @@ def render_text_to_image(html_template_path, text, font_size, image_width, image
     image = Image.open(temp_image_path)
 
     # Optionally, delete the temporary image file
-    # os.remove(temp_image_path)
+    os.remove(temp_image_path)
 
     return image
 
@@ -41,10 +41,10 @@ def find_optimal_font_size(html_template_path, text, image_width, image_height, 
     attempts = 0
 
     while attempts < max_attempts:
-        image = render_text_to_image(html_template_path, text, font_size, image_width, image_height, bbox)
         bbox_image = Image.new("RGB", (bbox[2] - bbox[0], bbox[3] - bbox[1]), (255, 255, 255))
         bbox_draw = ImageDraw.Draw(bbox_image)
-        text_size = bbox_draw.textbbox((0, 0), text, font=ImageFont.truetype("DejaVuSans.ttf", font_size))
+        font_path = '/Users/imgyuseong/PycharmProjects/text_generator/font/DejaVuSans.ttf'
+        text_size = bbox_draw.textbbox((0, 0), text, font=ImageFont.truetype(font_path, font_size))
 
         if text_size[2] <= (bbox[2] - bbox[0]) and text_size[3] <= (bbox[3] - bbox[1]):
             font_size += step
@@ -56,8 +56,8 @@ def find_optimal_font_size(html_template_path, text, image_width, image_height, 
     return font_size - step
 
 def get_final_text_img(bbox, width=800, height=800):
-    bbox = [bbox[0][0], bbox[0][1], bbox[1][0], bbox[1][1]]
-    html_template_path = 'font.html'
+    bbox = [int(bbox[0][0]), int(bbox[0][1]), int(bbox[1][0]), int(bbox[1][1])]
+    html_template_path = '/Users/imgyuseong/PycharmProjects/text_generator/font/font.html'
     text = 'This is a test text!'
     image_width, image_height = width, height
     optimal_font_size = find_optimal_font_size(html_template_path, text, image_width, image_height, bbox)
@@ -65,8 +65,8 @@ def get_final_text_img(bbox, width=800, height=800):
 
     return image
 if __name__ == '__main__':
+    # getArea return 형식
+    bbox = [(0, 622.1849365234375), (800, 800)]
 
-    bbox = [50, 50, 400, 400]  # x0, y0, x1, y1
-
-    image = get_final_text_img()
+    image = get_final_text_img(bbox)
     image.show()  # Display the image
