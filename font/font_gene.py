@@ -34,7 +34,7 @@ def render_text_to_image(html_template_path, text, font_size, image_width, image
 
     return image
 
-def find_optimal_font_size(html_template_path, text, image_width, image_height, bbox):
+def find_optimal_font_size(text, bbox):
     font_size = 10
     step = 5
     max_attempts = 100
@@ -60,7 +60,7 @@ def get_final_text_img(bbox, width=800, height=800):
     html_template_path = '/Users/imgyuseong/PycharmProjects/text_generator/font/font.html'
     text = 'This is a test text!'
     image_width, image_height = width, height
-    optimal_font_size = find_optimal_font_size(html_template_path, text, image_width, image_height, bbox)
+    optimal_font_size = find_optimal_font_size(text, bbox)
     image = render_text_to_image(html_template_path, text, optimal_font_size, image_width, image_height, bbox)
 
     return image

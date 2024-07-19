@@ -4,3 +4,8 @@ yolov5s.pt
 datas
 .DS_Store
 __pycache__/
+
+.env
+
+resized_images/
+result_images
