@@ -1,6 +1,6 @@
 from PIL import Image
 import os
-def resize_image(img_path, target_size=(800, 800)):
+def resize_image(img_path, target_size=(1024, 1024)):
     # 이미지 열기
     img = Image.open(img_path)
 
@@ -11,7 +11,7 @@ def resize_image(img_path, target_size=(800, 800)):
 
 
 # 테스트를 위한 예제
-def resize_images_in_directory(directory_path, output_directory, target_size=(800, 800)):
+def resize_images_in_directory(directory_path, output_directory, target_size=(1024, 1024)):
     """디렉토리에 있는 모든 이미지를 리사이즈하고 출력 디렉토리에 저장합니다."""
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
@@ -28,8 +28,8 @@ def resize_images_in_directory(directory_path, output_directory, target_size=(80
             count += 1
 
 if __name__ == '__main__':
-    dir_path = '/Users/imgyuseong/PycharmProjects/text_generator/datas/test-feed'  # 이미지 경로를 지정하세요
-    output_dir = '/Users/imgyuseong/PycharmProjects/text_generator/resized_images'  # 리사이즈된 이미지를 저장할 경로
+    dir_path = '/Users/imgyuseong/PycharmProjects/text_generator/datas/user-input-sample/sample-sensualing'  # 이미지 경로를 지정하세요
+    output_dir = '/Users/imgyuseong/PycharmProjects/text_generator/datas/user-input-sample/sample-sensualing/resized_images'  # 리사이즈된 이미지를 저장할 경로
 
     resize_images_in_directory(dir_path, output_dir)
 
