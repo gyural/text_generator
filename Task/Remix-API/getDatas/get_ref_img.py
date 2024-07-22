@@ -1,6 +1,6 @@
 import random
 
-base_dir = '/Task/Remix-API/image_sources.txt'
+base_dir = '/Users/imgyuseong/PycharmProjects/text_generator/Task/Remix-API/image_sources.txt'
 
 
 def get_reference_img(num=5):

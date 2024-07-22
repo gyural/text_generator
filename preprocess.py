@@ -28,8 +28,8 @@ def resize_images_in_directory(directory_path, output_directory, target_size=(10
             count += 1
 
 if __name__ == '__main__':
-    dir_path = '/Users/imgyuseong/PycharmProjects/text_generator/datas/user-input-sample/sample-sensualing'  # 이미지 경로를 지정하세요
-    output_dir = '/Users/imgyuseong/PycharmProjects/text_generator/datas/user-input-sample/sample-sensualing/resized_images'  # 리사이즈된 이미지를 저장할 경로
+    dir_path = '/Users/imgyuseong/PycharmProjects/text_generator/datas/user-input-sample/sample-apple/bg-removed'  # 이미지 경로를 지정하세요
+    output_dir = '/Users/imgyuseong/PycharmProjects/text_generator/datas/user-input-sample/sample-apple/resized_images'  # 리사이즈된 이미지를 저장할 경로
 
     resize_images_in_directory(dir_path, output_dir)
 
